@@ -1,0 +1,8 @@
+
+.idea/*
+
+*.pyc
+
+pdt.egg-info/*
+
+dist/*

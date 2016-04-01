@@ -1,0 +1,4 @@
+include pdt/datasets/lightcurves/*
+
+exclude pdt/datasets/images/*
+exclude pdt/datasets/originals/*
