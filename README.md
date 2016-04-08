@@ -10,6 +10,8 @@ The latest PDT uses [Birch](https://en.wikipedia.org/wiki/BIRCH) to find highly-
 
 Note that the input light curves <b>must</b> have the same number of data points. PDT then assumes that each light curve is synced in time. PDT is not designed to deal with missing data points or desynced data points. Also note that the light curves must be cleaned beforehand (e.g. highly-fluctuated data points, etc). Nevertheless, such functionality (e.g. dealing with desynced data, pre-processing, etc.) might be implemented in the future.  
 
+Although PDT is designed for astronomical research, PDT can be applied to any kind of time series data such as stock market, weather data, etc.
+
 ## Index
 1. [Dependency](#1-dependency)
 2. [Installation](#2-installation)
@@ -170,5 +172,5 @@ Webpage: https://sites.google.com/site/dwkim78/
 
 #### Keywords
 
-astronomy - light curves - trend removal - detrend - machine learning - Birch - clustering
+astronomy - light curves - time series - trend removal - detrend - machine learning - Birch - clustering - stock market - weather
 
