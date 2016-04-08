@@ -128,7 +128,7 @@ for lc in lcs:
     detrended = pdt.detrend(lc)
 ```
 
-In order to use PDT, light curve set must be read beforehand (e.g. the line  ```lcs = ...```). The ```lcs``` must consists of N rows and each row must contain M columns. N is the number of light curves and M is the number of data points. ```lcs``` could be either Python list or numpy.ndarry. For example:
+In order to use PDT, light curve set must be read beforehand (i.e. the line  ```lcs = ...```). The ```lcs``` must consist of N rows where each row contains M columns. N is the number of light curves and M is the number of data points. ```lcs``` could be either Python list or numpy.ndarry. For example:
 
 ```
 lcs = [
@@ -138,7 +138,7 @@ lcs = [
       ]
 ```
 
-is the light curve set consisting of three light curves, each of which contains 5 data points.
+is a data set consisting of three light curves, each of which contains 5 data points.
 
 When creating the PDT instance, you can set additional two options as:
 
