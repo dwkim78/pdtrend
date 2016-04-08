@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pylab as pl
 
@@ -30,7 +32,25 @@ def test():
     logger.info('Detrending one light curves using the master trends.')
     detrended = pdt.detrend(lcs[1])
 
-    logger.info('Ploting results.')
+    logger.info('Plotting results.')
+    # Creating an output folder.
+    output_path = './outputs/'
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
+    # Plotting the master trends.
+    pl.figure(figsize=(10, 4))
+    for i in range(len(pdt.master_trends)):
+        pl.subplot(len(pdt.master_trends), 1, i + 1)
+        pl.plot(pdt.master_trends[i], 'b.', label='Master trend %d' % (i + 1))
+        pl.ylabel('Normalized flux')
+        pl.xlabel('Time index')
+        pl.legend(numpoints=1, loc='lower right')
+        pl.grid()
+    pl.tight_layout()
+    pl.savefig('%s/master_trends.png' % output_path)
+
+    # Plotting a detrended result of one light curve.
     pl.figure(figsize=(14, 8))
     pl.subplot(211)
     pl.plot(lcs[1], 'b.', label='Raw')
@@ -48,7 +68,7 @@ def test():
     pl.xlabel('Time index')
     pl.grid()
     pl.legend(numpoints=1)
-    pl.show()
+    pl.savefig('%s/detrended.png' % output_path)
 
     logger.info('Done.')
     logger.handlers = []

@@ -19,7 +19,9 @@ class PDTrend:
         these M data points are synced in time. Thus pdtrend does not use
         any time information.
         :param n_min_member: The minimum number of members in each cluster.
-        :param dist_cut: Distance cut to filter clusters.
+        :param dist_cut: Distance cut to filter clusters. If the median distance
+        between members in a cluster is larger than the cut, the cluster is
+        discarded.
         """
 
         # Convert the light curve set to numpy array.
@@ -53,7 +55,7 @@ class PDTrend:
 
     def _filter_clusters(self):
         """
-        Filter a cluster 1) which has less than "n_min_member" members,
+        Filter a cluster if 1) it has less than "n_min_member" members, or
         2) median distance between each member is larger than "dist_cut".
         """
         unique_labels = set(self.birch.labels_)

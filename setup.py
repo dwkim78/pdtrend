@@ -5,8 +5,8 @@ def readme():
         return f.read()
 
 setup(
-    name='detrend',
-    version='0.1',
+    name='pdtrend',
+    version='0.2',
     description='Photometric Detrending Algorithm',
     long_description=readme(),
     platforms=['any'],
@@ -21,7 +21,7 @@ setup(
     keywords=['astronomy', 'light curves', 'time-series survey',
               'machine learning', 'trend', 'detrend'],
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
