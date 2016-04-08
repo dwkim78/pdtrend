@@ -170,5 +170,5 @@ Webpage: https://sites.google.com/site/dwkim78/
 
 #### Keywords
 
-astronomy - light curves - trend removal - detrend - machine learning
+astronomy - light curves - trend removal - detrend - machine learning - Birch - clustering
 
