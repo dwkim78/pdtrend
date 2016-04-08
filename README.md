@@ -99,9 +99,9 @@ This command reads the sample data set cosisting of 57 Pan-STARRS light curves (
 
 The above image shows the master trend constructed by the clustering algorithm. In this example data set, PDT found one master trend. For details about what is a master trend, see [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K).
 
-The following image is an example light curve before and after the detrending. Note that when PDT detrends a light curves, it minimized RMS of residuals while constraining weights for each master trend to be positive. The positive constraint is mandatory to avoid undesirable RMS minimization. For instance, if the weights are negative while the master trends are monotonically <b>increasing</b>, RMS minimization can reduce monotonically <b>decreasing</b> signals in light curves, which is unwanted. 
+The following image is an example light curve before (top) and after (bottom) the detrending. Note that when PDT detrends a light curves, it minimized RMS of residuals while constraining weights for each master trend to be positive. The positive constraint is mandatory to avoid undesirable RMS minimization. For instance, if the weights are negative while the master trends are monotonically <b>increasing</b>, RMS minimization can reduce monotonically <b>decreasing</b> signals in light curves, which is unwanted. 
 
-<div align="center"><img src="./pdtrend/datasets/images/detrended.png" width="100%"œ>[ An example of a detrended light curve ]</div>
+<div align="center"><img src="./pdtrend/datasets/images/detrended.png" width="100%"œ>[ Example of the detrended light curve ]</div>
 
 
 ## How to Use PDT
@@ -146,6 +146,31 @@ When creating the PDT instance, you can set additional two options as:
 |---:|:---|
 | n_min_member | The minimum number of members in each cluster. If a cluster has fewer members, PDT discards the cluster. Default is 5. If you have a lot of light curves (e.g. several hundreds), you can increase this number to 10, 20, 30 or so. |
 | dist_cut | The distance matrix that PDT uses is (1 - correlation matrix) / 2. Thus, if a cluster found by Birch consists of light curves of random Gaussian noise (i.e. no clear variability), it is likely that the median distance between the light curves is close to 0.5. Thus we can remove clusters whose median distance is larger than 0.5. Nevertheless, the default value is set to 0.45 in order to discard less-correlated clusters as well. If you increase this value (e.g. to 0.6 or so), PDT will construct master trends consisting of non-varying light curves. |
+
+
+### Logger
+
+If you want to write log messages either to console or to disk, you can use the PDT Logger class as:
+
+```python
+from pdtrend import Logger
+
+logger = Logger().getLogger()
+
+logger.debug('debug message')
+logger.info('info message')
+logger.warn('warn message')
+logger.error('error message')
+logger.critical('critical message')
+```
+
+Keep in mind that you need to generate only one logger instance through the whole processes, but not many. If you want to save log messages to a file, generate a logger instance as follows:
+ 
+ ```python
+ logger = Logger('/PATH/TO/FILE.log').getLogger()
+ ```
+
+This will send log messages to both console and a log file. Note that the path must be the absolute path.
 
 
 ## ChangeLog
