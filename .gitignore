@@ -3,6 +3,4 @@
 
 *.pyc
 
-pdt.egg-info/*
-
 dist/*

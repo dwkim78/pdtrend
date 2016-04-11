@@ -15,8 +15,18 @@ def test():
     lcs = load_lightcurve_set()
     logger.info('\tThe number of light curves is %d.' % len(lcs))
 
+    np.random.seed(1024)
+    # Create random weights.
+    #weights = np.random.rand(lcs.shape[0])
+    # Same weights.
+    weights = np.ones(lcs.shape[0])
+
+    # X and Y coordinates
+    xy_coords = np.random.rand(lcs.shape[0], 2) * 1000.
+
     logger.info('Initializing pdtrend.')
-    pdt = PDTrend(lcs)
+    pdt = PDTrend(lcs, weights=weights, xy_coords=xy_coords,
+                  n_min_member=10, dist_cut=0.45)
 
     # We can run all the following routines using "pdtrend.run()",
     # but, here we do it individually to print log messages.
@@ -37,6 +47,9 @@ def test():
     output_path = './outputs/'
     if not os.path.exists(output_path):
         os.makedirs(output_path)
+
+    # Plotting spatial distribution.
+    pdt.plot_spatial('%s/spatial.png' % output_path)
 
     # Plotting the master trends.
     pl.figure(figsize=(10, 4))

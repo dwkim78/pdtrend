@@ -21,7 +21,7 @@ setup(
     keywords=['astronomy', 'light curves', 'time-series survey',
               'machine learning', 'trend', 'detrend'],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
