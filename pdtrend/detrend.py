@@ -21,6 +21,7 @@ class PDTrend:
         these M data points are synced in time. Thus pdtrend does not use
         any time information.
         :param weights: A list of weights for the corresponding light curves.
+        It is used only when constructing master trends.
         It must contain N elements. N is the number of the light curves.
         See the "lcs" parameter. Default is None, so the identical weights for
         all light curves.
@@ -119,7 +120,8 @@ class PDTrend:
                 'Adjust input parameters and try again. ' +
                 'For instance, decrease "n_min_member" or ' +
                 'increase "dist_cut". For details, ' +
-                'visit https://github.com/dwkim78/pdtrend')
+                'visit https://github.com/dwkim78/pdtrend'
+            )
 
     def _build_master_trends(self):
         """

@@ -6,7 +6,7 @@ def readme():
 
 setup(
     name='pdtrend',
-    version='0.2',
+    version='0.3',
     description='Photometric Detrending Algorithm',
     long_description=readme(),
     platforms=['any'],
