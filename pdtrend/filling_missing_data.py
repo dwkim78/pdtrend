@@ -4,7 +4,7 @@ from scipy.interpolate import UnivariateSpline
 
 
 class FMdata:
-    def __init__(self, lcs, times, n_min_data=100):
+    def __init__(self, lcs, times, weights=None, n_min_data=100):
         """
         Filling missing values for each light curve using quadratic interpolation
         without smoothing. Note that extrapolation must be strictly prohibited,
@@ -12,6 +12,9 @@ class FMdata:
         and the earliest end epoch among the all light curves.
         :param lcs: A list of light curves.
         :param times: A list of times.
+        :param weights: A list of weights. Default is None. Weights are not used
+        to fill missing values. FMdata will just discard weights based on
+        "n_min_data".
         :param n_min_data: The minimum number of data points in each
         light curve. If fewer than this, the light curve will be discarded.
         """
@@ -20,6 +23,9 @@ class FMdata:
             lcs = np.array(lcs)
         if type(times) != np.ndarray:
             times = np.array(times)
+        if weights is not None:
+            if type(weights) != np.ndarray:
+                weights = np.array(weights)
 
         # Dimension check.
         if lcs.shape[0] != times.shape[0]:
@@ -35,6 +41,8 @@ class FMdata:
         # Initialize.
         self.lcs = lcs[keep_index]
         self.times = times[keep_index]
+        if weights is not None:
+            self.weights = weights[keep_index]
 
     def run(self):
         # Sync times.
@@ -42,8 +50,10 @@ class FMdata:
 
         # Fill missing values.
         self._fill_missing_values()
-
-        return self.filled_lcs, self.synced_epoch
+        if self.weights is None:
+            return self.filled_lcs, self.synced_epoch
+        else:
+            return self.filled_lcs, self.synced_epoch, self.weights
 
     def _sync_time(self):
         """

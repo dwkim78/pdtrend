@@ -18,7 +18,7 @@ setup(
     author_email='dwkim78@gmail.com',
     install_requires=['numpy>=1.10', 'scikit-learn>=0.17', 'scipy>=0.17',
                       'matplotlib>=1.5'],
-    keywords=['astronomy', 'light curves', 'time-series survey',
+    keywords=['astronomy', 'light curves', 'time series',
               'machine learning', 'trend', 'detrend'],
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',

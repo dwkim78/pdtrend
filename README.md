@@ -17,7 +17,8 @@ Although PDT is designed for astronomical research, PDT can be applied to any ki
 2. [Installation](#installation)
 3. [Test the Installation](#test)
 4. [How to Use PDT](#how-to-use-pdt)
-5. [Missing Data Points](#missing-data-points)
+    * [Missing Values](#missing-values)
+5. [Application](#application)
 
 - [ChangeLog](#changelog)
 - [Citation](#citation)
@@ -94,7 +95,7 @@ yyyy-mm-dd hh:mm:ss,sss INFO - Ploting results.
 yyyy-mm-dd hh:mm:ss,sss INFO - Done.
 ```
 
-This command reads the sample data set cosisting of 57 Pan-STARRS light curves (Python pickled and bzipped), run the clustering algorithm (i.e. Birch) to find clusters, construct master trends of those clusters, and detrend a sample light curve. It also generates three output images under the "./output" folder.
+This command reads the sample data set cosisting of 57 light curves (Python pickled and bzipped), run the clustering algorithm (i.e. Birch) to find clusters, construct master trends of those clusters, and detrend a sample light curve. It also generates three output images under the "./output" folder.
 
 <div align="center"><img src="./pdtrend/datasets/images/master_trends.png" width="100%"œ><br/>[ Master Trends ]</div>
 
@@ -153,7 +154,7 @@ When creating the PDT instance, you can set additional two options as:
 | n_min_member | The minimum number of members in each cluster. If a cluster has fewer members, PDT discards the cluster. Default is 10. If you have a lot of light curves (e.g. several hundreds or thousands), you might need to increase this number to 20, 30, 50, 100 or so. |
 | dist_cut | The distance matrix that PDT uses is (1 - correlation matrix) / 2. If a cluster found by Birch consists of light curves of random Gaussian noise (i.e. no clear variability), it is likely that the median distance between the light curves is close to 0.5. Thus we can remove clusters whose median distance is larger than 0.5. Nevertheless, the default value is set to 0.45 in order to discard less-correlated clusters as well. If you increase this value (e.g. to 0.6 or so), PDT will construct master trends consisting of non-varying light curves. |
 | weights | A list of weights for the light curves. Default is None, so the identical weights for all light curves. The number of weights must be same with the number of input light curves. PDT uses the weights only when constructing master trends. See [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K) for details. |
-| xy_coords | A list of x and y spatial coordinates of a star of each light curve. Default is None. It must contains Nx2 elements, where N is the number of input light curves. The first column is the x coordinate and the second column is the y coordinate. If this list is given, you can use ```pdt.plot_spatial('/PATH/TO/FILE/ImageName.png')``` function which will plot spatial distribution of constructed master trends. |
+| xy_coords | A list of x and y spatial coordinates of a star of each light curve. Default is None. It must contains Nx2 elements, where N is the number of input light curves. The first column is the x coordinate and the second column is the y coordinate. If this list is given, you can use ```pdt.plot_spatial('/PATH/TO/FILE/ImageName.png')``` function that plots spatial distribution of the constructed master trends. |
 
 
 After creating an PDT instance (e.g. ```pdt```), you can execute the command ```pdt.run()```, which will find clusters and construct master trends. To remove trends in each light curve, you can then use ```pdt.detrend(lc)``` command which will return a detrended light curve. ```lc``` is an individual light curve of either 1d list or 1d numpy.ndarray. For example, 
@@ -201,9 +202,9 @@ pdt.run()
 The second execution of ```pdt.run()``` will be faster than the first execution because the Birch cluster is already trained (i.e. ```pdt.birch```) during the first execution. The Birch cluster will be retrained only if you create a new PDT instance (same goes for the correlation matrix and distance matrix).
 
 
-### Missing Data Points
+### Missing Values
 
-PDT is designed to work for synced light curves in time. Nevertheless, PDT provides a module that fills missing values using interpolation. <b>Remember</b> that any kinds of these "filling missing values" methods could introduce another biases and yield undesired results. Please use this module <b>at your own risk</b>.
+PDT is designed to work for synced light curves in time. Nevertheless, PDT provides a module that fills missing values using interpolation. <b>Remember</b> that any kinds of these "filling missing values" methods could introduce another biases and yield undesired results. Please use this module <b>at your own risk</b>. <b>Note</b> that you must have a set of light curves that satisfies: 1) the light curves are from the same survey, 2) the sampling rate of the light curves is similar, and 3) their observation periods are generally same. If any of these condition is not satisfied, detrended results could be very inaccurate.
 
 PDT uses interpolation of order of one (i.e. <b>linear interpolation</b>). PDT does not use higher order interpolation (e.g. quadratic or cubic) to minimize over-fitting risk. You can use the module as follows:
 
@@ -211,7 +212,8 @@ PDT uses interpolation of order of one (i.e. <b>linear interpolation</b>). PDT d
 from pdtrend import FMdata
 
 # Filling missing data points.
-lcs, epoch = FMdata(lcs_missing, times, n_min_data=100)
+fmt = FMdata(lcs_missing, times, n_min_data=100)
+lcs, epoch = fmt.run()
 ```
 
 ```lcs_missing``` is an array of light curves with missing values and ```times``` is an array of observation times for the corresponding light curves. The number of data points between an individual light curve and a corresponding time list must match. The following example shows the three light curves that are not synced:
@@ -251,10 +253,18 @@ The most <b>important</b> thing you have to remember is to set one parameter whe
 |---:|:---|
 | n_min_data | The number of minimum data points in a light curves. If a light curve has fewer data points than this value, ```FMdata``` discards the light curve. Default is 100. |
 
-Setting this parameter to a proper value is very important. For example, let's assume that observation periods of almost all light curves are about one year. If there exists one light curve whose observation period is only one month, then every light curves in the returned ```lcs``` will be one month long. Therefore, you should either increase or decrease the value according to the temporal characteristics of your light curves.
+Setting this parameter to a proper value is very important. For example, let's assume that observation periods of almost all light curves are about one year. If there exists one light curve whose observation period is only one month, then every light curves in the returned ```lcs``` will be one month long. Therefore, you should either increase or decrease the value of ```n_min_data``` according to the temporal characteristics of your light curves.
+
+In addition, there is another optional parameter, which is:
+
+| Variable | Description |
+|---:|:---|
+| weights | A list of weights. One-dimensional array contains N elements, where N is the number of the light curves. Default is None. ```FMdata``` does not use the weights to fill missing values but just returns a filtered list of weights according to the ```n_min_data```.  |
+
+If ```weights``` is not None, then ```fmt.run()``` will return additional one output as ```lcs, epoch, weights = fmt.run()```, where ```weights``` is the filtered list of weights.
 
 
-The returned ```lcs``` can be ingested into PDT as: ```pdt = PDTrend(lcs); pdt.run()``` (see [How to Use PDT](#how-to-use-pdt) for details).
+The returned ```lcs``` and ```weights``` can be ingested into PDT as: ```pdt = PDTrend(lcs, weights=weights); pdt.run()``` (see [How to Use PDT](#how-to-use-pdt) for details).
 
 ### Logger
 
@@ -279,6 +289,13 @@ logger = Logger('/PATH/TO/FILE.log').getLogger()
 ```
 
 This will send log messages to both console and a log file. Note that the path must be the absolute path.
+
+
+## Application
+
+We applied PDT to the HATNet South dataset. Since the dataset is not synced, we filled the missing values using the ```FMdata``` and then run ```pdt``` to remove trends. The following images show the constructed master trends and an example light curve before and after the detrending.
+
+We ran ```FMdata``` with ```n_min_data=100```. Other parameters were default.
 
 
 ## ChangeLog
