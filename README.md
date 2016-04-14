@@ -5,10 +5,10 @@
 PDT (<b>P</b>hotometric <b>D</b>e<b>T</b>rending Algorithm  aims to remove systematic trends in the light curves. For details about the algorithm, see [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K). In brief, PDT finds clusters of light curves that are highly correlated, construct one master trend per cluster and detrend an individual light curve using the constructed master trends by minimizing residuals while constraining coefficients to be positive.
 
 
-The latest PDT uses [Birch](https://en.wikipedia.org/wiki/BIRCH) to find highly-correlated light curves rather than [Hierarchical clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering) that [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K) originally used. This is mainly because 1) Birch is scalable (i.e. applicable to large dataset), and 2) Birch does not need to set the number of clusters.
+The latest PDT uses [Birch](https://en.wikipedia.org/wiki/BIRCH) to find highly-correlated light curves rather than [Hierarchical clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering) that [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K) originally used. This is mainly because 1) Birch does not need to set the number of clusters, and 2) Birch is scalable (i.e. applicable to large dataset).
 
 
-Note that PDT is designed to work <b>best</b> when the input light curves have the same number of data points that are synced in time (see [How to Use PDT](#how-to-use-pdt)). Nevertheless, PDT provides a module to deal with missing data points (i.e. not-synced data). For details, see the section: [Missing Data Points](#missing-data-points). Also note that the light curves <b>must</b> be cleaned beforehand (e.g. highly-fluctuated data points, etc).
+Note that PDT is designed for the input light curves having the same number of data points that are <b>synced</b> in time (see [How to Use PDT](#how-to-use-pdt)). Nevertheless, PDT provides a module to deal with missing data points (i.e. not-synced data). For details, see the section: [Missing Values](#missing-values). Also note that the light curves <b>must</b> be cleaned beforehand (e.g. highly-fluctuated data points, etc).
 
 Although PDT is designed for astronomical research, PDT can be applied to any kind of time series data such as stock market, weather data, etc.
 
@@ -105,7 +105,7 @@ The following image is an example light curve before (top) and after (bottom) th
 
 <div align="center"><img src="./pdtrend/datasets/images/detrended.png" width="100%"œ>[ Example of the detrended light curve ]</div>
 
-In addition, PDT can plot spatial distribution of the constructed master trends if x and y coordinates of stars of the light curves are given (see [How to Use PDT](#5-how-to-use-pdt) for details). In this test dataset, the x and y coordinates are randomly generated coordinates between 0 and 1000.
+In addition, PDT can plot spatial distribution of the constructed master trends if x and y coordinates of stars of the light curves are given (see [How to Use PDT](#how-to-use-pdt) for details). In this test dataset, the x and y coordinates are randomly generated coordinates between 0 and 1000.
 
 <div align="center"><img src="./pdtrend/datasets/images/spatial.png" width="60%"œ><br/>[ Spatial distribution of the master trend ]</div>
 
@@ -328,5 +328,5 @@ Webpage: https://sites.google.com/site/dwkim78/
 
 #### Keywords
 
-astronomy - light curves - time series - trend removal - detrend - machine learning - Birch - clustering - stock market - weather
+astronomy - light curves - time series - trend removal - detrend - machine learning - Birch - clustering
 
