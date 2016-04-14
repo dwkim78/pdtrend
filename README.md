@@ -233,7 +233,7 @@ times = [
 
 Note that each list in ```times``` must be in ascending order before using ```FMdata```.
 
-The returned ```lcs``` is an array of light curves after filling missing values. The returned ```epoch``` is one-dimensional array contains <b>synced</b> observation epochs. Note that, in order to prevent extrapolation, the start epoch and the end epoch of ```epoch``` is the latest start epoch and the earliest end epoch among ```times```. Otherwise, extrapolation will occur for some light curves.
+The returned ```lcs``` is an array of light curves after filling missing values. The returned ```epoch``` is one-dimensional array contains <b>synced</b> observation epochs. Note that, in order to prevent extrapolation, the start epoch and the end epoch of ```epoch``` is the latest start epoch and the earliest end epoch among ```times```, respectively. Otherwise, extrapolation will occur for some light curves.
 
 
 In case of the above example, the returned ```lcs``` and ```epoch``` will be (Note: of course, we cannot apply ```FMdata``` to the above example data since there are too few data points. This is just a conceptual example):
@@ -293,9 +293,6 @@ This will send log messages to both console and a log file. Note that the path m
 
 ## Application
 
-We applied PDT to the HATNet South dataset. Since the dataset is not synced, we filled the missing values using the ```FMdata``` and then run ```pdt``` to remove trends. The following images show the constructed master trends and an example light curve before and after the detrending.
-
-We ran ```FMdata``` with ```n_min_data=100```. Other parameters were default.
 
 
 ## ChangeLog
