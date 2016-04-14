@@ -203,18 +203,18 @@ The second execution of ```pdt.run()``` will be faster than the first execution 
 
 ### Missing Data Points
 
-PDT is designed to work for synced light curves in time. However, in almost all cases, there exist missing data points (i.e. non-synced data). Thus we provide a module to fill missing data points for such data using interpolation. Nevertheless, please <b>remember</b> that any kinds of these "filling missing values" methods could introduce another biases and yield undesired results. Please use this module <b>at your own risk</b>.
+PDT is designed to work for synced light curves in time. Nevertheless, PDT provides a module that fills missing values using interpolation. <b>Remember</b> that any kinds of these "filling missing values" methods could introduce another biases and yield undesired results. Please use this module <b>at your own risk</b>.
 
-PDT uses interpolation of order of one (i.e. linear interpolation). PDT does not use higher order interpolation (e.g. quadratic or cubic) to minimize over-fitted results. You can use the module as follows:
+PDT uses interpolation of order of one (i.e. <b>linear interpolation</b>). PDT does not use higher order interpolation (e.g. quadratic or cubic) to minimize over-fitting risk. You can use the module as follows:
 
 ```
 from pdtrend import FMdata
 
 # Filling missing data points.
-lcs, epoch = FMdata(lcs_missing, times)
+lcs, epoch = FMdata(lcs_missing, times, n_min_data=100)
 ```
 
-```lcs_missing``` is an array of light curves with missing values and ```time``` is an array of observation times for the corresponding light curves. The number of data points between an individual light curve and a corresponding time list must match. The following example shows the three light curves that are not synced and corresponding times:
+```lcs_missing``` is an array of light curves with missing values and ```times``` is an array of observation times for the corresponding light curves. The number of data points between an individual light curve and a corresponding time list must match. The following example shows the three light curves that are not synced:
 
 ```
 lcs_missing = [
@@ -231,7 +231,7 @@ times = [
 
 Note that each list in ```times``` must be in ascending order before using ```FMdata```.
 
-The returned ```lcs``` is an array of light curves after filling missing values. The returned ```epoch``` is one-dimensional array contains <b>synced</b> observation epochs. Since PDT filled all missing values for the input light curves, it is not necessary to keep individual epoch information for each light curve. Note that, in order to prevent extrapolation, the start epoch and the end epoch of ```epoch``` is the latest start epoch and the earliest end epoch among ```times```. Otherwise, extrapolation will occur for some light curves.
+The returned ```lcs``` is an array of light curves after filling missing values. The returned ```epoch``` is one-dimensional array contains <b>synced</b> observation epochs. Note that, in order to prevent extrapolation, the start epoch and the end epoch of ```epoch``` is the latest start epoch and the earliest end epoch among ```times```. Otherwise, extrapolation will occur for some light curves.
 
 
 In case of the above example, the returned ```lcs``` and ```epoch``` will be (Note: of course, we cannot apply ```FMdata``` to the above example data since there are too few data points. This is just a conceptual example):
@@ -251,7 +251,7 @@ The most <b>important</b> thing you have to remember is to set one parameter whe
 |---:|:---|
 | n_min_data | The number of minimum data points in a light curves. If a light curve has fewer data points than this value, ```FMdata``` discards the light curve. Default is 100. |
 
-Setting this parameter to a proper value is very important. For example, let's assume that observation periods of almost all light curves are about one year. If there exists one light curve whose observation period is only one month, then every light curves in the returned ```lcs``` will be one month long because it is what "sync" means. Therefore, you should either increase or decrease the value according to the temporal characteristics of your light curves.
+Setting this parameter to a proper value is very important. For example, let's assume that observation periods of almost all light curves are about one year. If there exists one light curve whose observation period is only one month, then every light curves in the returned ```lcs``` will be one month long. Therefore, you should either increase or decrease the value according to the temporal characteristics of your light curves.
 
 
 The returned ```lcs``` can be ingested into PDT as: ```pdt = PDTrend(lcs); pdt.run()``` (see [How to Use PDT](#how-to-use-pdt) for details).
