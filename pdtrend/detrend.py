@@ -11,29 +11,13 @@ class PDTrend:
     def __init__(self, lcs, weights=None, xy_coords=None,
                  n_min_member=10, dist_cut=0.45):
         """
-        pdtrend determines master trends using Pearson correlation coefficients
-        between each light curve and then provide a function to detrend
-        each light curve using the determined master trends. For details,
-        see Kim et al. 2009.
-        :param lcs: A list of light curves. It must be the shape of N x M,
-        where N is the number of light curves and M is the number of data points.
-        Note that M must be same for all N light curves. pdtrend assumes that
-        these M data points are synced in time. Thus pdtrend does not use
-        any time information.
-        :param weights: A list of weights for the corresponding light curves.
-        It is used only when constructing master trends.
-        It must contain N elements. N is the number of the light curves.
-        See the "lcs" parameter. Default is None, so the identical weights for
-        all light curves.
-        :param xy_coords: X and Y coordinates of stars of the light curves.
-        It must contain Nx2 elements, where N is the number of the light curves.
-        If the coordinates are given, the function "plot_spatial" can be called
-        after constructing master trends, which will plot the spatial
-        distribution of the master trends.
+        pdtrend determines master trends using Pearson correlation coefficients between each light curve and then provide a function to detrend each light curve using the determined master trends. For details, see Kim et al. 2009.
+
+        :param lcs: A list of light curves. It must be the shape of N x M, where N is the number of light curves and M is the number of data points. Note that M must be same for all N light curves. pdtrend assumes that these M data points are synced in time. Thus pdtrend does not use any time information.
+        :param weights: A list of weights for the corresponding light curves. It is used only when constructing master trends. It must contain N elements. N is the number of the light curves. See the "lcs" parameter. Default is None, so the identical weights for all light curves.
+        :param xy_coords: X and Y coordinates of stars of the light curves. It must contain Nx2 elements, where N is the number of the light curves. If the coordinates are given, the function "plot_spatial" can be called after constructing master trends, which will plot the spatial distribution of the master trends.
         :param n_min_member: The minimum number of members in each cluster.
-        :param dist_cut: Distance cut to filter clusters. If the median distance
-        between members in a cluster is larger than the cut, the cluster is
-        discarded.
+        :param dist_cut: Distance cut to filter clusters. If the median distance between members in a cluster is larger than the cut, the cluster is discarded.
         """
 
         # Convert the light curve set to numpy array.

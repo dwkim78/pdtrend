@@ -117,7 +117,7 @@ Using PDT is relatively simple because PDT assumes that light curves are synced.
 
 The following pseudo code shows how to use PDT.
 
-```
+```python
 # Import PDT.
 from pdtrend import PDTrend
 
@@ -137,7 +137,7 @@ for lc in lcs:
 
 In order to use PDT, light curve set must be read beforehand (i.e. the line  ```lcs = ...```). The ```lcs``` must consist of N rows where each row contains M columns. N is the number of light curves and M is the number of data points. ```lcs``` could be either Python list or numpy.ndarry. For example:
 
-```
+```python
 lcs = [
         [1, 2, 3, 4, 5],
         [5, 4, 3, 2, 1],
@@ -159,7 +159,7 @@ When creating the PDT instance, you can set additional two options as:
 
 After creating an PDT instance (e.g. ```pdt```), you can execute the command ```pdt.run()```, which will find clusters and construct master trends. To remove trends in each light curve, you can then use ```pdt.detrend(lc)``` command which will return a detrended light curve. ```lc``` is an individual light curve of either 1d list or 1d numpy.ndarray. For example, 
 
-```
+```python
 lc = [1, 2, 3, 4, 5]
 ```
 
@@ -184,12 +184,11 @@ You can access these information using the PDT instance. For instance, to access
 
 ### If You Get "No clusters were found" Message
 
-It means that PDT failed to find clusters of light curves that are highly correlated. This could imply that your dataset is indeed clean and have no trends in it. Nevertheless, if you still want to detect clusters of (less-highly-correlated) light curves, you can either decrease ```n_min_member``` or increase ```dist_cut```, and rerun. For example,
+It means that PDT failed to find clusters of light curves that are highly correlated. This could imply that your dataset does not have strong trends. Nevertheless, if you still want to detect clusters of (less-highly-correlated) light curves, you can either decrease ```n_min_member``` or increase ```dist_cut```, and rerun. For example,
 
-```
-...
+```python
 # The first execution.
-pdt.run() # If this returns you the message, "No clusters were found". 
+pdt.run() # If this returns the message, "No clusters were found".
 
 # Then, adjust parameters. For example:
 pdt.n_min_member = 8
@@ -208,7 +207,7 @@ PDT is designed to work for synced light curves in time. Nevertheless, PDT provi
 
 PDT uses interpolation of order of one (i.e. <b>linear interpolation</b>). PDT does not use higher order interpolation (e.g. quadratic or cubic) to minimize over-fitting risk. You can use the module as follows:
 
-```
+```python
 from pdtrend import FMdata
 
 # Filling missing data points.
@@ -218,7 +217,7 @@ lcs, epoch = fmt.run()
 
 ```lcs_missing``` is an array of light curves with missing values and ```times``` is an array of observation times for the corresponding light curves. The number of data points between an individual light curve and a corresponding time list must match. The following example shows the three light curves that are not synced:
 
-```
+```python
 lcs_missing = [
                [3, 3, 5, 4, 2],
                [5, 6, 2],
@@ -238,7 +237,7 @@ The returned ```lcs``` is an array of light curves after filling missing values.
 
 In case of the above example, the returned ```lcs``` and ```epoch``` will be (Note: of course, we cannot apply ```FMdata``` to the above example data since there are too few data points. This is just a conceptual example):
 
-```
+```python
 lcs_missing = [
                [3, 5, 4],
                [5, 6, 2],
@@ -297,8 +296,11 @@ This will send log messages to both console and a log file. Note that the path m
 
 ## ChangeLog
 
+### v.?.?
+- add Gaussian noise when filling missing values in order to introduce randomness so that they are not correlated with other light curves by any change?
+
 ### v.0.3
-- modules for dealing with missing data points and not-synced data point.
+- modules for dealing with missing values and not-synced data point.
 
 ### v.0.2
 - consider weights for light curves while building master trends
@@ -317,8 +319,7 @@ This will send log messages to both console and a log file. Note that the path m
 
 ## Citation
 
-If you use PDT in publication, we would appreciate citations to the paper, 
-[Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K) and this GitHub repository as well.
+If you use PDT in publication, we would appreciate citations to the paper, [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K) and this GitHub repository as well.
 
 
 ## Contact
