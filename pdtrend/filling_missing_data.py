@@ -4,22 +4,26 @@ from scipy.interpolate import UnivariateSpline
 
 
 class FMdata:
-    def __init__(self, lcs, times, weights=None, n_min_data=100):
-        """
-        Filling missing values using quadratic interpolation.
+    """
+    Filling missing values using quadratic interpolation.
 
-        Note that extrapolation must be strictly prohibited, and thus we sync
-        each light curve based on the latest start epoch and the earliest end
-        epoch among the all light curves.
+    Extrapolation is strictly prohibited, and thus we sync
+    each light curve based on the latest start epoch and the earliest end
+    epoch among the all light curves.
 
-        :param lcs: A list of light curves.
-        :param times: A list of times.
-        :param weights: A list of weights. Default is None. Weights are not
+    Parameters
+    ----------
+    lcs : (N,) array_like
+    times : (N,) array_like
+    weights : (N,) array_like
+        A list of weights. Default is None. Weights are not
         used to fill missing values. FMdata will just discard weights based
         on "n_min_data".
-        :param n_min_data: The minimum number of data points in each light
-        curve. If fewer than this, the light curve will be discarded.
-        """
+    n_min_data : int
+        The minimum number of data points in each light curve.
+        If fewer than this, the light curve will be discarded.
+    """
+    def __init__(self, lcs, times, weights=None, n_min_data=100):
         # Type check.
         if type(lcs) != np.ndarray:
             lcs = np.array(lcs)
@@ -90,7 +94,10 @@ class FMdata:
         """
         Fill missing values.
 
-        :return: filled lcs and synced epoch.
+        Returns
+        -------
+        out: numpy.ndarray
+            Filled lcs and synced epoch.
         """
         # Fitting.
         filled_lcs = []

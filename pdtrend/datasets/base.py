@@ -12,7 +12,10 @@ def load_lightcurve_set():
     """
     Return the set of light curves for testing pdtrend.
 
-    :return: An array of light curves.
+    Returns
+    -------
+    out : numpy.ndarray
+        An array of light curves.
     """
 
     import bz2
