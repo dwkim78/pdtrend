@@ -101,39 +101,3 @@ class FMdata:
             filled_lcs.append(filled_lc)
 
         self.filled_lcs = np.array(filled_lcs)
-
-
-if __name__ == '__main__':
-    # Number of light curves.
-    n_lc = 100
-    # Number of data points.
-    n_data = 200
-    # The maximum ratio of missing data points.
-    missing_ratio = 0.3
-
-    times = []
-    lcs = []
-    for i in range(n_lc):
-        # The number of missing data points.
-        n_missing = int(np.random.rand() * missing_ratio * n_data)
-        index = np.arange(0, n_data)
-        np.random.shuffle(index)
-
-        t = np.arange(0, n_data)[index[n_missing:]]
-        t.sort()
-        lc = np.random.randn(n_data)[index[n_missing:]] * 10. + 100.
-
-        times.append(t)
-        lcs.append(lc)
-
-    fmdata = FMdata(lcs, times)
-    lcs, epoch = fmdata.run()
-
-    from detrend import PDTrend
-    pdt = PDTrend(lcs, n_min_member=10, dist_cut=0.5)
-    pdt.run()
-
-    import pylab as pl
-    pl.plot(epoch, pdt.master_trends[0])
-    pl.show()
-
