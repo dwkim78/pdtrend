@@ -11,13 +11,29 @@ class PDTrend:
     def __init__(self, lcs, weights=None, xy_coords=None,
                  n_min_member=10, dist_cut=0.45):
         """
-        pdtrend determines master trends using Pearson correlation coefficients between each light curve and then provide a function to detrend each light curve using the determined master trends. For details, see Kim et al. 2009.
+        pdtrend determines master trends using Pearson correlation coefficients
+        between each light curve and then provide a function to detrend each
+        light curve using the determined master trends. For details, see Kim
+        et al. 2009.
 
-        :param lcs: A list of light curves. It must be the shape of N x M, where N is the number of light curves and M is the number of data points. Note that M must be same for all N light curves. pdtrend assumes that these M data points are synced in time. Thus pdtrend does not use any time information.
-        :param weights: A list of weights for the corresponding light curves. It is used only when constructing master trends. It must contain N elements. N is the number of the light curves. See the "lcs" parameter. Default is None, so the identical weights for all light curves.
-        :param xy_coords: X and Y coordinates of stars of the light curves. It must contain Nx2 elements, where N is the number of the light curves. If the coordinates are given, the function "plot_spatial" can be called after constructing master trends, which will plot the spatial distribution of the master trends.
+        :param lcs: A list of light curves. It must be the shape of N x M,
+        where N is the number of light curves and M is the number of
+        data points. Note that M must be same for all N light curves. pdtrend
+        assumes that these M data points are synced in time. Thus pdtrend does
+        not use any time information.
+        :param weights: A list of weights for the corresponding light curves.
+        It is used only when constructing master trends. It must contain N
+        elements. N is the number of the light curves. See the "lcs" parameter.
+        Default is None, so the identical weights for all light curves.
+        :param xy_coords: X and Y coordinates of stars of the light curves.
+        It must contain Nx2 elements, where N is the number of the light curves.
+        If the coordinates are given, the function "plot_spatial" can be called
+        after constructing master trends, which will plot the spatial
+        distribution of the master trends.
         :param n_min_member: The minimum number of members in each cluster.
-        :param dist_cut: Distance cut to filter clusters. If the median distance between members in a cluster is larger than the cut, the cluster is discarded.
+        :param dist_cut: Distance cut to filter clusters. If the median distance
+        between members in a cluster is larger than the cut, the cluster is
+        discarded.
         """
 
         # Convert the light curve set to numpy array.
@@ -65,9 +81,7 @@ class PDTrend:
         self.dist_matrix = dist_matrix
 
     def _find_clusters(self, branching_factor=50, threshold=0.1):
-        """
-        Find clusters using Birch and the distance matrix.
-        """
+        """Find clusters using Birch and the distance matrix."""
         birch = Birch(branching_factor=branching_factor,
                       threshold=threshold).fit(self.dist_matrix)
 
@@ -108,9 +122,7 @@ class PDTrend:
             )
 
     def _build_master_trends(self):
-        """
-        Build master trends using the filtered clusters.
-        """
+        """Build master trends using the filtered clusters."""
         master_trends_indices = []
         master_trends = []
         for label in self._filtered_labels:
@@ -140,9 +152,7 @@ class PDTrend:
         self.master_trends = master_trends
 
     def run(self):
-        """
-        Run pdtrend pipeline.
-        """
+        """Run pdtrend pipeline."""
         if self.corr_matrix is None or self.dist_matrix is None:
             self._calculate_distance_matrix()
             self._find_clusters()
@@ -155,21 +165,15 @@ class PDTrend:
         self._build_master_trends()
 
     def _func_trends(self, p, x):
-        """
-        Return sum of the trends.
-        """
+        """Return sum of the trends."""
         return np.sum(x * p.reshape(len(p), 1), axis=0)
 
     def _residuals(self, p, x, y):
-        """
-        Return residual between sum of the trends and a light curve.
-        """
+        """Return residual between sum of the trends and a light curve."""
         return y - self._func_trends(p, x)
 
     def detrend(self, lc):
-        """
-        Detrend a light curves using the constructed master trends.
-        """
+        """Detrend a light curves using the constructed master trends."""
 
         # Convert the light curve set to numpy array.
         if type(lc) != np.ndarray:
@@ -196,6 +200,7 @@ class PDTrend:
     def plot_spatial(self, filename='spatial.png'):
         """
         Plot a spatial distribution of the constructed master trends.
+
         :param filename: A png filename including the path. For example,
         "./outputs/spatial.png". Default is "spatial.png"
         """

@@ -6,12 +6,19 @@ from scipy.interpolate import UnivariateSpline
 class FMdata:
     def __init__(self, lcs, times, weights=None, n_min_data=100):
         """
-        Filling missing values for each light curve using quadratic interpolation without smoothing. Note that extrapolation must be strictly prohibited, and thus we sync each light curve based on the latest start epoch and the earliest end epoch among the all light curves.
+        Filling missing values using quadratic interpolation.
+
+        Note that extrapolation must be strictly prohibited, and thus we sync
+        each light curve based on the latest start epoch and the earliest end
+        epoch among the all light curves.
 
         :param lcs: A list of light curves.
         :param times: A list of times.
-        :param weights: A list of weights. Default is None. Weights are not used to fill missing values. FMdata will just discard weights based on "n_min_data".
-        :param n_min_data: The minimum number of data points in each light curve. If fewer than this, the light curve will be discarded.
+        :param weights: A list of weights. Default is None. Weights are not
+        used to fill missing values. FMdata will just discard weights based
+        on "n_min_data".
+        :param n_min_data: The minimum number of data points in each light
+        curve. If fewer than this, the light curve will be discarded.
         """
         # Type check.
         if type(lcs) != np.ndarray:
@@ -52,7 +59,10 @@ class FMdata:
 
     def _sync_time(self):
         """
-        Walk through times of all light curves and create one-dimensional list of times that will be used to fill missing values for every light curves. In order to prevent extrapolation, we chose the latest start epoch and the earliest end epoch as the new epoch range.
+        Walk through times of all light curves and create one-dimensional
+        list of times that will be used to fill missing values for every light
+        curves. In order to prevent extrapolation, we chose the latest start
+        epoch and the earliest end epoch as the new epoch range.
         """
         # Get all unique epochs and find
         # the latest start epoch and the earliest end epoch.

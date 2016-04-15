@@ -11,6 +11,7 @@ from os.path import join
 def load_lightcurve_set():
     """
     Return the set of light curves for testing pdtrend.
+
     :return: An array of light curves.
     """
 
