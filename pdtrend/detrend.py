@@ -18,18 +18,18 @@ class PDTrend:
 
     Parameters
     ----------
-    lcs : (N, M) array_like
+    lcs : array_like
         A list of light curves. It must be the shape of N x M,
         where N is the number of light curves and M is the number of
         data points. Note that M must be same for all N light curves.
         pdtrend assumes that these M data points are synced in time.
         Thus pdtrend does not use any time information.
-    weights : (N,) array_like
+    weights : array_like
         A list of weights for the corresponding light curves.
         It is used only when constructing master trends. It must contain N
         elements. N is the number of the light curves. See the "lcs" parameter.
         Default is None, so the identical weights for all light curves.
-    xy_coords : (N, 2) array_like
+    xy_coords : array_like
         X and Y coordinates of stars of the light curves.
         It must contain Nx2 elements, where N is the number of the light curves.
         If the coordinates are given, the function "plot_spatial" can be called

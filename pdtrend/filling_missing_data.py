@@ -13,9 +13,9 @@ class FMdata:
 
     Parameters
     ----------
-    lcs : (N,) array_like
-    times : (N,) array_like
-    weights : (N,) array_like
+    lcs : array_like
+    times : array_like
+    weights : array_like
         A list of weights. Default is None. Weights are not
         used to fill missing values. FMdata will just discard weights based
         on "n_min_data".
@@ -51,6 +51,16 @@ class FMdata:
             self.weights = weights[keep_index]
 
     def run(self):
+        """
+        Fill missing values and returns results.
+
+        Returns
+        -------
+        filled_lcs: numpy.ndarray
+            An array of light curves after filling missing values.
+        synced_epoch: numpy.ndarray
+            Epoch synced between all light curves.
+        """
         # Sync times.
         self._sync_time()
 
@@ -91,14 +101,7 @@ class FMdata:
         self.synced_epoch = epoch
 
     def _fill_missing_values(self):
-        """
-        Fill missing values.
-
-        Returns
-        -------
-        out: numpy.ndarray
-            Filled lcs and synced epoch.
-        """
+        """Fill missing values."""
         # Fitting.
         filled_lcs = []
         for i in range(len(self.lcs)):

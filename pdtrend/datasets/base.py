@@ -14,7 +14,7 @@ def load_lightcurve_set():
 
     Returns
     -------
-    out : numpy.ndarray
+    lcs : numpy.ndarray
         An array of light curves.
     """
 
