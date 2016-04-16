@@ -15,11 +15,11 @@ class FMdata:
     ----------
     lcs : array_like
     times : array_like
-    weights : array_like
+    weights : array_like, optional
         A list of weights. Default is None. Weights are not
         used to fill missing values. FMdata will just discard weights based
         on "n_min_data".
-    n_min_data : int
+    n_min_data : int, optional
         The minimum number of data points in each light curve.
         If fewer than this, the light curve will be discarded.
     """

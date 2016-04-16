@@ -24,20 +24,20 @@ class PDTrend:
         data points. Note that M must be same for all N light curves.
         pdtrend assumes that these M data points are synced in time.
         Thus pdtrend does not use any time information.
-    weights : array_like
+    weights : array_like, optional
         A list of weights for the corresponding light curves.
         It is used only when constructing master trends. It must contain N
         elements. N is the number of the light curves. See the "lcs" parameter.
         Default is None, so the identical weights for all light curves.
-    xy_coords : array_like
+    xy_coords : array_like, optional
         X and Y coordinates of stars of the light curves.
         It must contain Nx2 elements, where N is the number of the light curves.
         If the coordinates are given, the function "plot_spatial" can be called
         after constructing master trends, which will plot the spatial
         distribution of the master trends.
-    n_min_member : int
+    n_min_member : int, optional
         The minimum number of members in each cluster.
-    dist_cut : float
+    dist_cut : float, optional
         Distance cut to filter clusters. If the median distance
         between members in a cluster is larger than the cut, the cluster is
         discarded. Must be between [0, 1].
@@ -211,7 +211,7 @@ class PDTrend:
 
         Parameters
         ----------
-        filename : str
+        filename : str, optional
             A png filename including the path. For example,
             "./outputs/spatial.png". Default is "spatial.png"
         """
