@@ -211,7 +211,7 @@ PDT uses interpolation of order of one (i.e. <b>linear interpolation</b>). PDT d
 from pdtrend import FMdata
 
 # Filling missing data points.
-fmt = FMdata(lcs_missing, times, n_min_data=100)
+fmt = FMdata(lcs_missing, times, n_min_data=3)
 results = fmt.run()
 ```
 
@@ -237,7 +237,7 @@ The most <b>important</b> thing you have to remember is to set one parameter whe
 
 | Variable | Description |
 |---:|:---|
-| n_min_data | The number of minimum data points in a light curves. If a light curve has fewer data points than this value, ```FMdata``` discards the light curve. Default is 100. |
+| n_min_data | The number of minimum data points in a light curves. If a light curve has fewer data points than this value, ```FMdata``` discards the light curve. <b>Default is 100</b>. |
 
 Setting this parameter to a proper value is very important. For example, let's assume that observation periods of almost all light curves are about one year. If there exists one light curve whose observation period is only one month, then every light curves in the returned ```lcs``` will be one month long. Therefore, you should either increase or decrease the value of ```n_min_data``` according to the temporal characteristics of your light curves.
 
@@ -247,10 +247,10 @@ The returned ```results``` after executing ```fmt.run()``` is a Python dictionar
 |---:|:---|
 | lcs | An array of light curves with the missing values filled. |
 | epoch | An one-dimensional array contains <b>synced</b> observation epochs. Note that, in order to prevent extrapolation, the start epoch and the end epoch of ```epoch``` is the latest start epoch and the earliest end epoch among ```times```, respectively. Otherwise, extrapolation will occur for some light curves. |
-| indices | A list of the indices for each ```lcs``` corresponding to the indices of ```lcs_missing```. Since ```FMdata``` discards light curves in ```lcs_missing``` that have fewer data points than ```n_min_data```, the returned ```lcs``` could contain less number of light curves than ```lcs_missing```. ```indices``` gives the indices of light curves in ```lcs_missing``` that are <b>not</b> discarded. This returned ```indices``` can be used to filter your own list related with ```lcs``` such as a list of weights, a list of x and y coordinates, etc. |
+| indices | A list of the indices for each ```lcs``` corresponding to the indices of ```lcs_missing```. Since ```FMdata``` discards light curves in ```lcs_missing``` that have fewer data points than ```n_min_data```, the returned ```lcs``` could contain the less number of light curves than ```lcs_missing```. Thus, in order to find out which light curves are not discarded, ```indices``` gives the indices of light curves in ```lcs_missing``` that are <b>not</b> discarded. This returned ```indices``` can be used to filter your own list related with ```lcs``` such as a list of weights, a list of x and y coordinates, etc. |
 
 
-In case of the above example, the returned ```lcs``` and ```epoch``` will be (Note: of course, we cannot apply ```FMdata``` to the above example data since there are too few data points. This is just a conceptual example):
+In case of the above example, the returned ```lcs```, ```epoch``` and ```indices``` will be (Note: of course, we cannot apply ```FMdata``` to the above example data since there are too few data points. This is just a conceptual example):
 
 ```python
 results['lcs'] = [
@@ -259,6 +259,7 @@ results['lcs'] = [
                [3, 3, 3]
               ]
 results['epoch'] = [2, 3, 4]
+results['indices'] = [0, 1, 2]
 ```
 
 The returned ```lcs``` can be ingested into PDT as: ```pdt = PDTrend(lcs); pdt.run()``` (see [How to Use PDT](#how-to-use-pdt) for details).

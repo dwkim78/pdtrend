@@ -23,7 +23,7 @@ class FMdata:
         The minimum number of data points in each light curve.
         If fewer than this, the light curve will be discarded.
     """
-    def __init__(self, lcs, times, weights=None, n_min_data=100):
+    def __init__(self, lcs, times, n_min_data=100):
         # Type check.
         if type(lcs) != np.ndarray:
             lcs = np.array(lcs)
