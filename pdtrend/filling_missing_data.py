@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 
 from scipy.interpolate import UnivariateSpline
 
@@ -14,7 +15,10 @@ class FMdata:
     Parameters
     ----------
     lcs : array_like
+        An array containing a set of light curves. The number of data points
+        in each light curve does not need to be identical.
     times : array_like
+        An array of observation epochs of the corresponding light curve.
     weights : array_like, optional
         A list of weights. Default is None. Weights are not
         used to fill missing values. FMdata will just discard weights based
@@ -49,6 +53,8 @@ class FMdata:
         self.times = times[keep_index]
         if weights is not None:
             self.weights = weights[keep_index]
+        else:
+            self.weights = weights
 
     def run(self):
         """
@@ -101,13 +107,27 @@ class FMdata:
         self.synced_epoch = epoch
 
     def _fill_missing_values(self):
-        """Fill missing values."""
-        # Fitting.
+        """Fill missing values for each light curve."""
         filled_lcs = []
+        filled_indices = []
         for i in range(len(self.lcs)):
+            # Check if the length is same. Print warning but not break the loop.
+            # Thus, need to discard the corresponding weight as well.
+            if len(self.times[i]) != len(self.lcs[i]):
+                warnings.warn(('The number of data points of the %dth ' +
+                               'light curve is not matched with the one ' +
+                               'of the list of times, and thus is discarded.')
+                              % (i + 1))
+                continue
+
             # Quadratic spline without smoothing.
             spl = UnivariateSpline(self.times[i], self.lcs[i], k=1., s=0.)
             filled_lc = spl(self.synced_epoch)
             filled_lcs.append(filled_lc)
 
+            # Indices for the new weight list.
+            filled_indices.append(i)
+
         self.filled_lcs = np.array(filled_lcs)
+        if self.weights is not None:
+            self.weights = self.weights[filled_indices]

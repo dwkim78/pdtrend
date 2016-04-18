@@ -33,17 +33,21 @@ def test_with_missing_data():
         keep_index.sort()
 
         lcs_new.append(lcs[i][keep_index])
-        times_new.append(times[i][keep_index])
+        # Make wrong time information for test.
+        if i == 10:
+            times_new.append(times[i][keep_index[:-2]])
+        else:
+            times_new.append(times[i][keep_index])
 
     logger.info('Fill missing data points.')
-    # Fill missing values.
-    fmd = FMdata(lcs_new, times_new)
-    lcs, epoch = fmd.run()
-
     # Create random weights.
-    #weights = np.random.rand(lcs.shape[0])
+    # weights = np.random.rand(lcs.shape[0])
     # Same weights.
     weights = np.ones(lcs.shape[0])
+
+    # Fill missing values.
+    fmd = FMdata(lcs_new, times_new, weights)
+    lcs, epoch, weights = fmd.run()
 
     # X and Y coordinates
     xy_coords = np.random.rand(lcs.shape[0], 2) * 1000.
@@ -63,7 +67,7 @@ def test_with_missing_data():
     logger.info('Building master trends.')
     pdt._build_master_trends()
 
-    logger.info('Detrending one light curves using the master trends.')
+    logger.info('Detrending a light curve using the master trends.')
     detrended = pdt.detrend(lcs[1])
 
     logger.info('Plotting results.')

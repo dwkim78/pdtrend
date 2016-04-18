@@ -39,7 +39,7 @@ def test():
     logger.info('Building master trends.')
     pdt._build_master_trends()
 
-    logger.info('Detrending one light curves using the master trends.')
+    logger.info('Detrending a light curve using the master trends.')
     detrended = pdt.detrend(lcs[1])
 
     logger.info('Plotting results.')

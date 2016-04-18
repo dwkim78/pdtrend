@@ -8,9 +8,9 @@ PDT (<b>P</b>hotometric <b>D</b>e<b>T</b>rending Algorithm aims to remove system
 The latest PDT uses [Birch](https://en.wikipedia.org/wiki/BIRCH) to find highly-correlated light curves rather than [Hierarchical clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering) that [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K) originally used. This is mainly because 1) Birch does not need to set the number of clusters, and 2) Birch is scalable (i.e. applicable to large dataset).
 
 
-Note that PDT is designed for the input light curves having the same number of data points that are <b>synced</b> in time (see [How to Use PDT](#how-to-use-pdt)). Nevertheless, PDT provides a module to deal with missing data points (i.e. not-synced data). For details, see the section: [Missing Values](#missing-values). Also note that the light curves <b>must</b> be cleaned beforehand (e.g. highly-fluctuated data points, etc).
+Note that PDT is designed for the light curves having the same number of data points that are <b>synced</b> in time (see [How to Use PDT](#how-to-use-pdt)). Nevertheless, PDT provides a module to deal with missing data points (i.e. not-synced data). For details, see the section: [Missing Values](#missing-values). Also note that the light curves <b>must</b> be cleaned beforehand (e.g. highly-fluctuated data points, etc).
 
-Although PDT is designed for astronomical research, PDT can be applied to any kind of time series data such as stock market, weather data, etc.
+Although PDT is designed for astronomical research, it can be applied to any kind of time series data such as stock market, weather data, etc.
 
 ## Index
 1. [Dependency](#dependency)
@@ -95,7 +95,7 @@ yyyy-mm-dd hh:mm:ss,sss INFO - Ploting results.
 yyyy-mm-dd hh:mm:ss,sss INFO - Done.
 ```
 
-This command reads the sample data set cosisting of 57 light curves (Python pickled and bzipped), run the clustering algorithm (i.e. Birch) to find clusters, construct master trends of those clusters, and detrend a sample light curve. It also generates three output images under the "./output" folder.
+This command reads the sample dataset consisting of 57 light curves (Python pickled and bzipped), run the clustering algorithm (i.e. Birch) to find clusters, construct master trends of those clusters, and detrend a sample light curve. It also generates three output images under the "./output" folder.
 
 <div align="center"><img src="./pdtrend/datasets/images/master_trends.png" width="100%"œ><br/>[ Master Trends ]</div>
 
@@ -105,7 +105,7 @@ The following image is an example light curve before (top) and after (bottom) th
 
 <div align="center"><img src="./pdtrend/datasets/images/detrended.png" width="100%"œ>[ Example of the detrended light curve ]</div>
 
-In addition, PDT can plot spatial distribution of the constructed master trends if x and y coordinates of stars of the light curves are given (see [How to Use PDT](#how-to-use-pdt) for details). In this test dataset, the x and y coordinates are randomly generated coordinates between 0 and 1000.
+In addition, PDT can plot spatial distribution of the constructed master trends if x and y coordinates of stars of the light curves are given (see [How to Use PDT](#how-to-use-pdt) for details). In this test dataset, the x and y coordinates are randomly generated between 0 and 1000.
 
 <div align="center"><img src="./pdtrend/datasets/images/spatial.png" width="60%"œ><br/>[ Spatial distribution of the master trend ]</div>
 
@@ -113,7 +113,7 @@ In addition, PDT can plot spatial distribution of the constructed master trends 
 
 ## How to Use PDT
 
-Using PDT is relatively simple because PDT assumes that light curves are synced. Nevertheless, note that PDT requires enough number of light curves to find clusters and master trends. We recommend to use PDT with at least 50 light curves, but not too many such as several tens of thousands because then it might take long to run. In the latter case, we recommend to run PDT several times using individual subsets of the light curves.
+Using PDT is relatively simple because PDT assumes that light curves are synced. Nevertheless, note that PDT requires enough number of light curves to find clusters and master trends. We recommend to use PDT with at least 50 light curves, but not too many such as several tens of thousands because then it might take long to run. In the latter case, we recommend to run PDT multiple times for individual subsets of the light curves.
 
 The following pseudo code shows how to use PDT.
 
@@ -135,7 +135,7 @@ for lc in lcs:
     detrended_lc = pdt.detrend(lc)
 ```
 
-In order to use PDT, light curve set must be read beforehand (i.e. the line  ```lcs = ...```). The ```lcs``` must consist of N rows where each row contains M columns. N is the number of light curves and M is the number of data points. ```lcs``` could be either Python list or numpy.ndarry. For example:
+In order to use PDT, light curves must be read beforehand (i.e. the line  ```lcs = ...```). The ```lcs``` must consist of N rows where each row contains M columns. N is the number of light curves and M is the number of data points. ```lcs``` could be either Python list or numpy.ndarry. For example:
 
 ```python
 lcs = [
@@ -151,7 +151,7 @@ When creating the PDT instance, you can set additional two options as:
 
 | Option | Description |
 |---:|:---|
-| n_min_member | The minimum number of members in each cluster. If a cluster has fewer members, PDT discards the cluster. Default is 10. If you have a lot of light curves (e.g. several hundreds or thousands), you might need to increase this number to 20, 30, 50, 100 or so. |
+| n_min_member | The minimum number of members in each cluster. If a cluster has fewer members, PDT discards the cluster. Default is 10. If you have a lot of light curves (e.g. several hundreds or thousands), you may want to increase this number to 20, 30, 50, 100 or so. |
 | dist_cut | The distance matrix that PDT uses is (1 - correlation matrix) / 2. If a cluster found by Birch consists of light curves of random Gaussian noise (i.e. no clear variability), it is likely that the median distance between the light curves is close to 0.5. Thus we can remove clusters whose median distance is larger than 0.5. Nevertheless, the default value is set to 0.45 in order to discard less-correlated clusters as well. If you increase this value (e.g. to 0.6 or so), PDT will construct master trends consisting of non-varying light curves. |
 | weights | A list of weights for the light curves. Default is None, so the identical weights for all light curves. The number of weights must be same with the number of input light curves. PDT uses the weights only when constructing master trends. See [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K) for details. |
 | xy_coords | A list of x and y spatial coordinates of a star of each light curve. Default is None. It must contains Nx2 elements, where N is the number of input light curves. The first column is the x coordinate and the second column is the y coordinate. If this list is given, you can use ```pdt.plot_spatial('/PATH/TO/FILE/ImageName.png')``` function that plots spatial distribution of the constructed master trends. |
@@ -164,19 +164,19 @@ lc = [1, 2, 3, 4, 5]
 ```
 
 
-Note that you can apply the constructed master trends to any light curves if their data points are synced. Thus, if you preprocess your data and remove low signal-to-noise-ratio (SNR) light curves from ```lcs``` before running ```pdt.run```, you can 1) construct high SNR master trends, and 2) reduce time for calculating correlation matrix. The constructed master trends, of course, can be used to detrend low SNR light curves.  
+Note that you can apply the constructed master trends to any light curves if their data points are synced. Thus, if you preprocess your data and remove low signal-to-noise-ratio (SNR) light curves from ```lcs``` before running ```pdt.run```, you can 1) construct high SNR master trends, and 2) reduce time for calculating correlation matrix. The constructed master trends, of course, can be used to detrend the low SNR light curves.
 
 
 ### Accessible Information
 
-Using the PDT instance, you can access the following information:
+Using the created PDT instance, you can access the following information:
 
 | Variable | Description |
 |---:|:---|
-| master_trends | An array of light curves of the constructed master trends. For instance, if there are two master trends, ```master_trends``` will give something like: ```[[3, 4, 5, 1, 2], [2, 3, 5, 1, 3]]```. The first element in the array is the light curve of the first master trend, and same goes for the second element. |
-| master_trends_indices | These indices correspond to the indices of ```lcs``` that are used to construct each master trend. For example, if there are two master trends, it will give something like ```[[4, 6, 8, 12, 41, 55, 68, 78, 99], [7, 11, 39, 44, 58]]```. The first element gives the indices of the light curves (i.e. indices of ```lcs```) that are used to build the first master trend, and same goes for the second element. |
-| corr_matrix | A correlation matrix. The correlation coefficients are calculated using the Pearson's correlation. |
-| dist_matrix | A distance matrix = (1. - a correlation matrix) / 2. |
+| master_trends | An array of light curves of the constructed master trends. For instance, if there are two master trends, ```master_trends``` will give something like: ```[[3, 4, 5, 1, 2], [2, 3, 5, 1, 3]]```. The first list in the array is the light curve of the first master trend, and same goes for the second list. |
+| master_trends_indices | These indices correspond to the indices of ```lcs``` that are used to construct each master trend. For example, if there are two master trends, it will give something like ```[[4, 6, 8, 12, 41, 55, 68, 78, 99], [7, 11, 39, 44, 58]]```. The first list gives the indices of the light curves (i.e. indices of ```lcs```) that are used to build the first master trend, and same goes for the second list. |
+| corr_matrix | A correlation matrix. The correlation coefficients are calculated using the Pearson's correlation algorithm. |
+| dist_matrix | A distance matrix = (1. - the correlation matrix) / 2. Thus, between 0 and 1. 0 is the closest distance (i.e. correlation = 1) whereas 1 is the farthest distance (i.e. correlation = -1). |
 | birch | A <a href="http://scikit-learn.org/">scikit-learn</a> instance of the trained Birch cluster. |
 
 You can access these information using the PDT instance. For instance, to access ```master_trends```, you can do as follows: ```pdt.master_trends```.
@@ -292,6 +292,7 @@ This will send log messages to both console and a log file. Note that the path m
 
 ## Application
 
+HATNet, SuperWASP, KMTNet?
 
 
 ## ChangeLog
