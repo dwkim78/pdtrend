@@ -2,7 +2,7 @@
 
 <div align="center"><img src="./pdtrend/datasets/images/PDT_logo.png"></div>
 
-PDT (<b>P</b>hotometric <b>D</b>e<b>T</b>rending Algorithm aims to remove systematic trends in the light curves. For details about the algorithm, see [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K). In brief, PDT finds clusters of light curves that are highly correlated using machine learning, construct one master trend per cluster and detrend an individual light curve using the constructed master trends by minimizing residuals while constraining coefficients to be positive.
+PDT (<b>P</b>hotometric <b>D</b>e<b>T</b>rending Algorithm Using Machine Learning) aims to remove systematic trends in the light curves. For details about the algorithm, see [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K). In brief, PDT finds clusters of light curves that are highly correlated using <b>machine learning</b>, construct one master trend per cluster and detrend an individual light curve using the constructed master trends by minimizing residuals while constraining coefficients to be positive.
 
 
 The latest PDT uses [Birch](https://en.wikipedia.org/wiki/BIRCH) to find highly-correlated light curves rather than [Hierarchical clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering) that [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K) originally used. This is mainly because 1) Birch does not need to set the number of clusters, and 2) Birch is scalable (i.e. applicable to large dataset).
@@ -295,6 +295,9 @@ HATNet, SuperWASP, KMTNet?
 
 
 ## ChangeLog
+
+### v.0.2.1
+- type of the output from FMdata is changed to Python dictionary.
 
 ### v.0.2
 - modules for dealing with missing values and not-synced data point.
