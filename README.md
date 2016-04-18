@@ -253,12 +253,12 @@ The returned ```results``` after executing ```fmt.run()``` is a Python dictionar
 In case of the above example, the returned ```lcs``` and ```epoch``` will be (Note: of course, we cannot apply ```FMdata``` to the above example data since there are too few data points. This is just a conceptual example):
 
 ```python
-results['lcs'] --> [
+results['lcs'] = [
                [3, 5, 4],
                [5, 6, 2],
                [3, 3, 3]
               ]
-results['epoch'] --> [2, 3, 4]
+results['epoch'] = [2, 3, 4]
 ```
 
 The returned ```lcs``` can be ingested into PDT as: ```pdt = PDTrend(lcs); pdt.run()``` (see [How to Use PDT](#how-to-use-pdt) for details).
