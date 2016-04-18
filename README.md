@@ -296,8 +296,10 @@ HATNet, SuperWASP, KMTNet?
 
 ## ChangeLog
 
-### v.0.2.1
+### v.0.2.2
 - type of the output from FMdata is changed to Python dictionary.
+- PEP8 style Docstring.
+- many minor bugs fixed.
 
 ### v.0.2
 - modules for dealing with missing values and not-synced data point.
