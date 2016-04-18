@@ -1,12 +1,12 @@
 Metadata-Version: 1.1
 Name: pdtrend
-Version: 0.2
+Version: 0.2.2
 Summary: Photometric Detrending Algorithm
 Home-page: https://github.com/dwkim78/pdtrend
 Author: Dae-Won Kim
 Author-email: dwkim78@gmail.com
 License: MIT
-Description: PDT (Photometric DeTrending Algorithm aims to remove systematic trends in the light curves. For details about the algorithm, see [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K). In brief, PDT finds clusters of light curves that are highly correlated, construct one master trend per cluster and detrend an individual light curve using the constructed master trends by minimizing residuals while constraining coefficients to be positive. For details, visit the GitHub repository (https://github.com/dwkim78/pdtrend)
+Description: PDT (Photometric DeTrending Algorithm aims to remove systematic trends in the light curves. For details about the algorithm, see [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K). In brief, PDT finds clusters of light curves that are highly correlated using machine learning, construct one master trend per cluster and detrend an individual light curve using the constructed master trends by minimizing residuals while constraining coefficients to be positive. For details, visit the GitHub repository (https://github.com/dwkim78/pdtrend)
 Keywords: astronomy,light curves,time series,machine learning,trend,detrend
 Platform: any
 Classifier: Development Status :: 2 - Pre-Alpha
