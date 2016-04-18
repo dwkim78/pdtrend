@@ -296,28 +296,32 @@ HATNet, SuperWASP, KMTNet?
 
 ## ChangeLog
 
+### v.0.3.0 (planned)
+- release of alpha version.
+- add detrended examples of HATNet, SuperWASP, and KMTNet?
+
 ### v.0.2.2
 - type of the output from FMdata is changed to Python dictionary.
 - PEP8 style Docstring.
 - many minor bugs fixed.
 
-### v.0.2
+### v.0.2.0
 - modules for dealing with missing values and not-synced data point.
 
-### v.0.15
-- consider weights for light curves while building master trends
+### v.0.15.0
+- consider weights for light curves while building master trends.
 - if X and Y coordinates of light curves are given, pdtrend can plot spatial distribution of constructed master trends.
 - if no master trend is found, warning and advice messages will be printed. 
 
-### v.0.1
-- release pre-alpha version
-    - calculate correlation matrix and distance matrix
-    - train a Birch cluster
-    - construct master trends
-    - add a detrending module
+### v.0.1.0
+- release pre-alpha version.
+    - calculate correlation matrix and distance matrix.
+    - train a Birch cluster.
+    - construct master trends.
+    - add a detrending module.
 
 ### v.0.0.0
-- create the GitHub repository 
+- create the GitHub repository.
 
 ## Citation
 
