@@ -212,7 +212,7 @@ from pdtrend import FMdata
 
 # Filling missing data points.
 fmt = FMdata(lcs_missing, times, n_min_data=100)
-lcs, epoch = fmt.run()
+results = fmt.run()
 ```
 
 ```lcs_missing``` is an array of light curves with missing values and ```times``` is an array of observation times for the corresponding light curves. The number of data points between an individual light curve and a corresponding time list must match. The following example shows the three light curves that are not synced:
@@ -232,19 +232,6 @@ times = [
 
 Note that each list in ```times``` must be in ascending order before using ```FMdata```.
 
-The returned ```lcs``` is an array of light curves after filling missing values. The returned ```epoch``` is one-dimensional array contains <b>synced</b> observation epochs. Note that, in order to prevent extrapolation, the start epoch and the end epoch of ```epoch``` is the latest start epoch and the earliest end epoch among ```times```, respectively. Otherwise, extrapolation will occur for some light curves.
-
-
-In case of the above example, the returned ```lcs``` and ```epoch``` will be (Note: of course, we cannot apply ```FMdata``` to the above example data since there are too few data points. This is just a conceptual example):
-
-```python
-lcs_missing = [
-               [3, 5, 4],
-               [5, 6, 2],
-               [3, 3, 3]
-              ]
-epoch = [2, 3, 4]
-```
 
 The most <b>important</b> thing you have to remember is to set one parameter when creating a ```FMdata``` instance, which is:
 
@@ -254,16 +241,27 @@ The most <b>important</b> thing you have to remember is to set one parameter whe
 
 Setting this parameter to a proper value is very important. For example, let's assume that observation periods of almost all light curves are about one year. If there exists one light curve whose observation period is only one month, then every light curves in the returned ```lcs``` will be one month long. Therefore, you should either increase or decrease the value of ```n_min_data``` according to the temporal characteristics of your light curves.
 
-In addition, there is another optional parameter, which is:
+The returned ```results``` after executing ```fmt.run()``` is a Python dictionary containing three elements as:
 
-| Variable | Description |
+| Key | Value |
 |---:|:---|
-| weights | A list of weights. One-dimensional array contains N elements, where N is the number of the light curves. Default is None. ```FMdata``` does not use the weights to fill missing values but just returns a filtered list of weights according to the ```n_min_data```.  |
+| lcs | An array of light curves with the missing values filled. |
+| epoch | An one-dimensional array contains <b>synced</b> observation epochs. Note that, in order to prevent extrapolation, the start epoch and the end epoch of ```epoch``` is the latest start epoch and the earliest end epoch among ```times```, respectively. Otherwise, extrapolation will occur for some light curves. |
+| indices | A list of the indices for each ```lcs``` corresponding to the indices of ```lcs_missing```. Since ```FMdata``` discards light curves in ```lcs_missing``` that have fewer data points than ```n_min_data```, the returned ```lcs``` could contain less number of light curves than ```lcs_missing```. ```indices``` gives the indices of light curves in ```lcs_missing``` that are <b>not</b> discarded. This returned ```indices``` can be used to filter your own list related with ```lcs``` such as a list of weights, a list of x and y coordinates, etc. |
 
-If ```weights``` is not None, then ```fmt.run()``` will return additional one output as ```lcs, epoch, weights = fmt.run()```, where ```weights``` is the filtered list of weights.
 
+In case of the above example, the returned ```lcs``` and ```epoch``` will be (Note: of course, we cannot apply ```FMdata``` to the above example data since there are too few data points. This is just a conceptual example):
 
-The returned ```lcs``` and ```weights``` can be ingested into PDT as: ```pdt = PDTrend(lcs, weights=weights); pdt.run()``` (see [How to Use PDT](#how-to-use-pdt) for details).
+```python
+results['lcs'] --> [
+               [3, 5, 4],
+               [5, 6, 2],
+               [3, 3, 3]
+              ]
+results['epoch'] --> [2, 3, 4]
+```
+
+The returned ```lcs``` can be ingested into PDT as: ```pdt = PDTrend(lcs); pdt.run()``` (see [How to Use PDT](#how-to-use-pdt) for details).
 
 ### Logger
 

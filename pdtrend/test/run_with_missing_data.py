@@ -46,14 +46,17 @@ def test_with_missing_data():
     weights = np.ones(lcs.shape[0])
 
     # Fill missing values.
-    fmd = FMdata(lcs_new, times_new, weights)
-    lcs, epoch, weights = fmd.run()
+    fmd = FMdata(lcs_new, times_new)
+    results = fmd.run()
+    lcs = results['lcs']
+    epoch = results['epoch']
+    indices = results['indices']
 
     # X and Y coordinates
     xy_coords = np.random.rand(lcs.shape[0], 2) * 1000.
 
     logger.info('Initializing pdtrend.')
-    pdt = PDTrend(lcs, weights=weights, xy_coords=xy_coords,
+    pdt = PDTrend(lcs, weights=weights[indices], xy_coords=xy_coords,
                   n_min_member=10, dist_cut=0.45)
 
     # We can run all the following routines using "pdtrend.run()",

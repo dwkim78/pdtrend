@@ -19,10 +19,6 @@ class FMdata:
         in each light curve does not need to be identical.
     times : array_like
         An array of observation epochs of the corresponding light curve.
-    weights : array_like, optional
-        A list of weights. Default is None. Weights are not
-        used to fill missing values. FMdata will just discard weights based
-        on "n_min_data".
     n_min_data : int, optional
         The minimum number of data points in each light curve.
         If fewer than this, the light curve will be discarded.
@@ -33,9 +29,6 @@ class FMdata:
             lcs = np.array(lcs)
         if type(times) != np.ndarray:
             times = np.array(times)
-        if weights is not None:
-            if type(weights) != np.ndarray:
-                weights = np.array(weights)
 
         # Dimension check.
         if lcs.shape[0] != times.shape[0]:
@@ -51,10 +44,6 @@ class FMdata:
         # Initialize.
         self.lcs = lcs[keep_index]
         self.times = times[keep_index]
-        if weights is not None:
-            self.weights = weights[keep_index]
-        else:
-            self.weights = weights
 
     def run(self):
         """
@@ -62,20 +51,20 @@ class FMdata:
 
         Returns
         -------
-        filled_lcs: numpy.ndarray
-            An array of light curves after filling missing values.
-        synced_epoch: numpy.ndarray
-            Epoch synced between all light curves.
+        results : dict
+            A dictionary containing missing-value filled light curves,
+            synced epoch, and the corresponding indices
+            of the raw light curves.
         """
         # Sync times.
         self._sync_time()
 
         # Fill missing values.
         self._fill_missing_values()
-        if self.weights is None:
-            return self.filled_lcs, self.synced_epoch
-        else:
-            return self.filled_lcs, self.synced_epoch, self.weights
+        results = {'lcs': self.filled_lcs, 'epoch': self.synced_epoch,
+                   'indices': self.indices}
+
+        return results
 
     def _sync_time(self):
         """
@@ -127,9 +116,8 @@ class FMdata:
 
             # Add the filled lc to a list.
             filled_lcs.append(filled_lc)
-            # Indices for the new weight list.
+            # Indices for the new list.
             filled_indices.append(i)
 
         self.filled_lcs = np.array(filled_lcs)
-        if self.weights is not None:
-            self.weights = self.weights[filled_indices]
+        self.indices = np.array(filled_indices)
