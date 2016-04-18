@@ -120,11 +120,13 @@ class FMdata:
                               % (i + 1))
                 continue
 
-            # Quadratic spline without smoothing.
+            # Linear spline fitting without smoothing. Thus the fitted line
+            # follows the exact values of the given input data.
             spl = UnivariateSpline(self.times[i], self.lcs[i], k=1., s=0.)
             filled_lc = spl(self.synced_epoch)
-            filled_lcs.append(filled_lc)
 
+            # Add the filled lc to a list.
+            filled_lcs.append(filled_lc)
             # Indices for the new weight list.
             filled_indices.append(i)
 

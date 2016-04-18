@@ -297,9 +297,6 @@ HATNet, SuperWASP, KMTNet?
 
 ## ChangeLog
 
-### v.?.?
-- add Gaussian noise when filling missing values in order to introduce randomness so that they are not correlated with other light curves by any change?
-
 ### v.0.2
 - modules for dealing with missing values and not-synced data point.
 
