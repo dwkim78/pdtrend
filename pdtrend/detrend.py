@@ -1,6 +1,3 @@
-__author__ = 'kim'
-
-import warnings
 import numpy as np
 
 from sklearn.cluster import Birch
@@ -11,10 +8,11 @@ class PDTrend:
     """
     Detrending systematic trends in a set of light curves.
 
-    pdtrend determines master trends using Pearson correlation coefficients
-    between each light curve and machine learning, and then provide a
+    PDTrend determines master trends using Pearson correlation coefficients
+    between each light curve and using machine learning, and then provide a
     function to detrend each light curve using the determined master trends.
-    For details, see Kim et al. 2009.
+    For details, see Kim et al. 2009 or visit the GitHub repository
+    (https://goo.gl/uRAXfr).
 
     Parameters
     ----------
@@ -36,18 +34,31 @@ class PDTrend:
         after constructing master trends, which will plot the spatial
         distribution of the master trends.
     n_min_member : int, optional
-        The minimum number of members in each cluster.
+        The minimum number of members in each cluster. Default is 10.
     dist_cut : float, optional
-        Distance cut to filter clusters. If the median distance
-        between members in a cluster is larger than the cut, the cluster is
-        discarded. Must be between [0, 1].
+        Distance cut to filter clusters found using the Birch clustering
+        algorithm. If the median distance
+        between members in a cluster is larger than the cut,
+        the cluster is discarded. Must be between [0, 1]. Default is 0.45.
+    branching_factor : int, optional
+        Branching factor for the Birch clustering. Default is 50.
+    threshold : float, optional
+        Threshold for the Birch clustering. Default is 0.5.
     """
     def __init__(self, lcs, weights=None, xy_coords=None,
-                 n_min_member=10, dist_cut=0.45):
+                 n_min_member=10, dist_cut=0.45,
+                 branching_factor=50, threshold=0.5):
         # Convert the light curve set to numpy array.
         if type(lcs) != np.ndarray:
             lcs = np.array(lcs)
 
+        # Sanity check.
+        if len(lcs.shape) != 2:
+            raise RuntimeError('lcs must be a 2-dimensional array.')
+
+        if lcs.shape[0] < n_min_member:
+            raise RuntimeError('The number of light curves in lcs ' +
+                               'is fewer than the n_min_member.')
         if weights is not None:
             if type(weights) != np.ndarray:
                 weights = np.array(weights)
@@ -76,6 +87,8 @@ class PDTrend:
         self.corr_matrix = None
         self.dist_matrix = None
         self.birch = None
+        self.branching_factor = branching_factor
+        self.threshold = threshold
 
     def _calculate_distance_matrix(self):
         """
@@ -88,16 +101,20 @@ class PDTrend:
         self.corr_matrix = corr_matrix
         self.dist_matrix = dist_matrix
 
-    def _find_clusters(self, branching_factor=50, threshold=0.1):
+    def _find_clusters(self):
         """Find clusters using Birch and the distance matrix."""
-        birch = Birch(branching_factor=branching_factor,
-                      threshold=threshold).fit(self.dist_matrix)
+        # TODO: Need to test with different threshold.
+        # Need to test with multiple dataset having trends.
+        # Branching factor is fine.
+        birch = Birch(branching_factor=self.branching_factor,
+                      threshold=self.threshold,
+                      n_clusters=None).fit(self.dist_matrix)
 
         self.birch = birch
 
     def _filter_clusters(self):
         """
-        Filter a cluster if 1) it has less than "n_min_member" members, or
+        Discard a cluster if 1) it has less than "n_min_member" members, or
         2) median distance between each member is larger than "dist_cut".
         """
         unique_labels = set(self.birch.labels_)
@@ -106,6 +123,7 @@ class PDTrend:
         for label in unique_labels:
             index = [i for i in range(len(self.birch.labels_)) if
                      self.birch.labels_[i] == label]
+            # The number of members in the given cluster.
             if len(index) < self.n_min_member:
                 continue
 
@@ -114,6 +132,7 @@ class PDTrend:
                 for j in range(i + 1, len(index)):
                     dist_list.append(self.dist_matrix[index[i], index[j]])
 
+            # Median distance check.
             if np.median(dist_list) <= self.dist_cut:
                 _filtered_labels.append(label)
 
@@ -165,7 +184,9 @@ class PDTrend:
             self._calculate_distance_matrix()
             self._find_clusters()
         else:
-            # For the safety.
+            # For the safety, just in case.
+            # If corr_matrix and dist_matrix is not None,
+            # birch must be not None either.
             if self.birch is None:
                 self._find_clusters()
 
@@ -216,8 +237,7 @@ class PDTrend:
             "./outputs/spatial.png". Default is "spatial.png"
         """
         if self.xy_coords is None:
-            warnings.warn('No x and y coordinates are given.')
-            return
+            raise RuntimeError('No x and y coordinates are given.')
 
         import pylab as pl
         pl.figure(figsize=(12, 12))
@@ -231,7 +251,8 @@ class PDTrend:
                     self.xy_coords[indices][:, 1],
                     marker=marks[int(i / len(colors)) % len(marks)],
                     color=colors[i % len(colors)], ls='None',
-                    label='Master trend %d' % (i + 1))
+                    label='Master trend %d: %d light curves' %
+                          (i + 1, len(self.master_trends_indices[i])))
         pl.xlabel('X coordinate')
         pl.ylabel('Y coordinate')
         pl.legend(numpoints=1)

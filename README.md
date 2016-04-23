@@ -12,6 +12,7 @@ Note that PDT is designed for the light curves having the same number of data po
 
 Although PDT is designed for astronomical research, it can be applied to any kind of time series data such as stock market, weather data, etc.
 
+
 ## Index
 1. [Dependency](#dependency)
 2. [Installation](#installation)
@@ -110,7 +111,6 @@ In addition, PDT can plot spatial distribution of the constructed master trends 
 <div align="center"><img src="./pdtrend/datasets/images/spatial.png" width="60%"œ><br/>[ Spatial distribution of the master trend ]</div>
 
 
-
 ## How to Use PDT
 
 Using PDT is relatively simple because PDT assumes that light curves are synced. Nevertheless, note that PDT requires enough number of light curves to find clusters and master trends. We recommend to use PDT with at least 50 light curves, but not too many such as several tens of thousands because then it might take long to run. In the latter case, we recommend to run PDT multiple times for individual subsets of the light curves.
@@ -155,6 +155,8 @@ When creating the PDT instance, you can set additional two options as:
 | dist_cut | The distance matrix that PDT uses is (1 - correlation matrix) / 2. If a cluster found by Birch consists of light curves of random Gaussian noise (i.e. no clear variability), it is likely that the median distance between the light curves is close to 0.5. Thus we can remove clusters whose median distance is larger than 0.5. Nevertheless, the default value is set to 0.45 in order to discard less-correlated clusters as well. If you increase this value (e.g. to 0.6 or so), PDT will construct master trends consisting of non-varying light curves. |
 | weights | A list of weights for the light curves. Default is None, so the identical weights for all light curves. The number of weights must be same with the number of input light curves. PDT uses the weights only when constructing master trends. See [Kim et al. 2009](http://adsabs.harvard.edu/abs/2009MNRAS.397..558K) for details. |
 | xy_coords | A list of x and y spatial coordinates of a star of each light curve. Default is None. It must contains Nx2 elements, where N is the number of input light curves. The first column is the x coordinate and the second column is the y coordinate. If this list is given, you can use ```pdt.plot_spatial('/PATH/TO/FILE/ImageName.png')``` function that plots spatial distribution of the constructed master trends. |
+| branching_factor | For details, see [scikit-learn Birch](http://goo.gl/HBheix). |
+| threshold | For details, see [scikit-learn Birch](http://goo.gl/HBheix). |
 
 
 After creating an PDT instance (e.g. ```pdt```), you can execute the command ```pdt.run()```, which will find clusters and construct master trends. To remove trends in each light curve, you can then use ```pdt.detrend(lc)``` command which will return a detrended light curve. ```lc``` is an individual light curve of either 1d list or 1d numpy.ndarray. For example, 
@@ -199,6 +201,8 @@ pdt.run()
 ```
 
 The second execution of ```pdt.run()``` will be faster than the first execution because the Birch cluster is already trained (i.e. ```pdt.birch```) during the first execution. The Birch cluster will be retrained only if you create a new PDT instance (same goes for the correlation matrix and distance matrix).
+
+In addition, you might want to increase ```threshold```, which is the maximum distance between sub-clusters to merge them into one cluster. Increasing the value tends to give a larger cluster (i.e. more members in the cluster), but those members might not be highly-correlated.
 
 
 ### Missing Values
@@ -264,6 +268,7 @@ results['indices'] = [0, 1, 2]
 
 The returned ```lcs``` can be ingested into PDT as: ```pdt = PDTrend(lcs); pdt.run()``` (see [How to Use PDT](#how-to-use-pdt) for details).
 
+
 ### Logger
 
 If you want to write log messages either to console or to disk, you can use the PDT Logger class as:
@@ -291,14 +296,14 @@ This will send log messages to both console and a log file. Note that the path m
 
 ## Application
 
-HATNet, SuperWASP, KMTNet?
+To several survey dataset.
 
 
 ## ChangeLog
 
 ### v.0.3.0 (planned)
-- release of alpha version.
-- add detrended examples of HATNet, SuperWASP, and KMTNet?
+- release of beta version.
+    - test with HATNet, SuperWASP, and KMTNet dataset?
 
 ### v.0.2.2
 - type of the output from FMdata is changed to Python dictionary.
@@ -306,7 +311,7 @@ HATNet, SuperWASP, KMTNet?
 - many minor bugs fixed.
 
 ### v.0.2.0
-- modules for dealing with missing values and not-synced data point.
+- modules for dealing with missing values (i.e. not-synced observations).
 
 ### v.0.15.0
 - consider weights for light curves while building master trends.
@@ -314,7 +319,7 @@ HATNet, SuperWASP, KMTNet?
 - if no master trend is found, warning and advice messages will be printed. 
 
 ### v.0.1.0
-- release pre-alpha version.
+- release of pre-alpha version.
     - calculate correlation matrix and distance matrix.
     - train a Birch cluster.
     - construct master trends.
@@ -322,6 +327,7 @@ HATNet, SuperWASP, KMTNet?
 
 ### v.0.0.0
 - create the GitHub repository.
+
 
 ## Citation
 
@@ -332,6 +338,7 @@ If you use PDT in publication, we would appreciate citations to the paper, [Kim 
 Dae-Won Kim, email: dwkim78 at gmail.com
 
 Webpage: https://sites.google.com/site/dwkim78/
+
 
 #### Keywords
 

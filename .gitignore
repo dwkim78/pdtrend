@@ -3,4 +3,6 @@
 
 *.pyc
 
+/pdtrend/test/outputs
+
 dist/*

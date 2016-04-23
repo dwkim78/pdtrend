@@ -48,18 +48,20 @@ def test_with_missing_data():
     # Fill missing values.
     fmd = FMdata(lcs_new, times_new)
     results = fmd.run()
+
+    # The output, "results", contains the following three items.
     lcs = results['lcs']
     epoch = results['epoch']
     indices = results['indices']
 
-    # X and Y coordinates
+    # X and Y coordinates, randomly generated.
     xy_coords = np.random.rand(lcs.shape[0], 2) * 1000.
 
     logger.info('Initializing pdtrend.')
     pdt = PDTrend(lcs, weights=weights[indices], xy_coords=xy_coords,
                   n_min_member=10, dist_cut=0.45)
 
-    # We can run all the following routines using "pdtrend.run()",
+    # We can run all the following protected routines using "pdtrend.run()",
     # but, here we do it individually to print log messages.
     logger.info('Calculating the distance matrix.')
     pdt._calculate_distance_matrix()
@@ -69,7 +71,6 @@ def test_with_missing_data():
     pdt._filter_clusters()
     logger.info('Building master trends.')
     pdt._build_master_trends()
-
     logger.info('Detrending a light curve using the master trends.')
     detrended = pdt.detrend(lcs[1])
 

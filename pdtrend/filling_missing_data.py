@@ -6,9 +6,9 @@ from scipy.interpolate import UnivariateSpline
 
 class FMdata:
     """
-    Filling missing values using quadratic interpolation.
+    Filling missing values using linear interpolation.
 
-    Extrapolation is strictly prohibited, and thus we sync
+    Extrapolation should be avoided, and thus we sync
     each light curve based on the latest start epoch and the earliest end
     epoch among the all light curves.
 
@@ -52,18 +52,20 @@ class FMdata:
         Returns
         -------
         results : dict
-            A dictionary containing missing-value filled light curves,
-            synced epoch, and the corresponding indices
-            of the raw light curves.
+            A Python dictionary containing three items such as
+            missing-value filled light curves,
+            synced epoch, and the indices of corresponding
+            raw light curves.
         """
         # Sync times.
         self._sync_time()
 
         # Fill missing values.
         self._fill_missing_values()
+
+        # Returned output is a Python dictionary containing three items.
         results = {'lcs': self.filled_lcs, 'epoch': self.synced_epoch,
                    'indices': self.indices}
-
         return results
 
     def _sync_time(self):
