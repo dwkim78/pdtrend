@@ -301,9 +301,13 @@ To several survey dataset.
 
 ## ChangeLog
 
-### v.0.3.0 (planned)
+### v.0.4.0 (planned)
 - release of beta version.
-    - test with HATNet, SuperWASP, and KMTNet dataset?
+    - test with HATNet, SuperWASP, and KMTNet dataset.
+
+### v.0.3.0 (planned)
+- release of alpha version.
+    - add another module for dealing with missing values.
 
 ### v.0.2.2
 - type of the output from FMdata is changed to Python dictionary.
