@@ -17,6 +17,7 @@ def load_lightcurve_set():
     """
 
     import bz2
+
     try:
         import cPickle as pickle
     except:
@@ -26,6 +27,6 @@ def load_lightcurve_set():
 
     # The light curves are bzipped and pickled.
     file_path = join(module_path, 'lightcurves/lc.pbz2')
-    lcs = pickle.load(bz2.BZ2File(file_path, 'r'))
+    lcs = pickle.load(bz2.BZ2File(file_path, 'r'), encoding='bytes')
 
     return lcs
