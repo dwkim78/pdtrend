@@ -2,6 +2,8 @@
 Base IO code for all datasets
 """
 
+import sys
+
 from os.path import dirname
 from os.path import join
 
@@ -27,6 +29,11 @@ def load_lightcurve_set():
 
     # The light curves are bzipped and pickled.
     file_path = join(module_path, 'lightcurves/lc.pbz2')
-    lcs = pickle.load(bz2.BZ2File(file_path, 'r'), encoding='bytes')
+    # For Python 3.
+    if sys.version_info.major >= 3:
+        lcs = pickle.load(bz2.BZ2File(file_path, 'r'), encoding='bytes')
+    # For Python 2.
+    else:
+        lcs = pickle.load(bz2.BZ2File(file_path, 'r'))
 
     return lcs

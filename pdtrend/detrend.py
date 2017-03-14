@@ -240,6 +240,7 @@ class PDTrend:
             raise RuntimeError('No x and y coordinates are given.')
 
         import pylab as pl
+
         pl.figure(figsize=(12, 12))
         pl.title('Spatial distribution of the constructed master trends')
 

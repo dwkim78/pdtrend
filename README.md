@@ -27,9 +27,7 @@ Although PDT is designed for astronomical research, it can be applied to any kin
 
 ## Dependency
 
-[Python 2.7+](https://www.python.org/) 
-
- * Not tested with Python 3.0+
+[Python 2.7+ or 3.5+](https://www.python.org/)
 
 [Numpy 1.10+](http://www.numpy.org/)
 
@@ -308,6 +306,10 @@ To several survey dataset.
 ### v.0.3.0 (planned)
 - release of alpha version.
     - add another module for dealing with missing values.
+
+### v.0.2.3
+- minor bug fixed for loading test light curves using pickle.load()
+- Python 3 compatible
 
 ### v.0.2.2
 - type of the output from FMdata is changed to Python dictionary.
