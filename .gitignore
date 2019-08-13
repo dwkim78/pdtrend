@@ -9,3 +9,4 @@ dist/*
 /pdtrend.egg-info/
 
 pdtrend.egg-info/PKG-INFO
+.DS_Store
